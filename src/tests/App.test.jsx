@@ -1,5 +1,6 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
+import { expect } from 'vitest';
 
 describe('<App/> Component', () => {
 
@@ -7,4 +8,12 @@ describe('<App/> Component', () => {
     render(<App />);
   });
 
+
+  it('header component check', () => {
+    render(<App />);
+
+    const header = screen.getByText('LOTR Project');
+
+    expect(header).toBeDefined();
+  });
 });
