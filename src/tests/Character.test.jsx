@@ -1,88 +1,133 @@
 import { render, screen } from '@testing-library/react';
 import Character from '../components/Character';
-import checkPropTypes from 'check-prop-types';
 
-// Optional function
-const checkProps = (component, conformingProps) => {
-    const propError = checkPropTypes(
-        component.propTypes,
-        conformingProps,
-        'prop',
-        component.name
-    );
-
-    expect(propError).toBeUndefined();
+const samwiseGamgee = {
+    "_id": "5cd99d4bde30eff6ebccfd0d",
+    "height": "1.22m (4'0\")",
+    "race": "Hobbit",
+    "gender": "Male",
+    "birth": "April 6 ,2980",
+    "spouse": "Rosie Cotton",
+    "death": "Still alive, after going to the ,Undying Lands, in ,FO 61",
+    "realm": "",
+    "hair": "Blond (movie)",
+    "name": "Samwise Gamgee",
+    "wikiUrl": "http://lotr.wikia.com//wiki/Samwise_Gamgee",
+    "imgUrl": "https://www.frontporchrepublic.com/wp-content/uploads/2011/05/Samwise-Gamgee.jpg"
 };
 
-// We'll reuse these props
-const characterProps = {
-    family: 'Targaryans',
-    fullName: 'Viserys Targaryn',
-    imageUrl: 'https://thronesapi.com/assets/images/viserys-targaryan.jpg',
-    title: 'King Viserys III'
-};
+it('Character Component Renders Without Error', () => {
+    render(<Character />);
+});
 
-describe('<Character/> component', () => {
-    // Prompt 2: The component Renders
-    it('renders without error', () => {
+describe('Character Component Content Structure', () => {
+
+    it("Renders an H2 for the Character's Name", () => {
         render(<Character />);
-
         const characterHeading = screen.getByRole('heading', { level: 2 });
+
         expect(characterHeading).toBeDefined();
     });
 
-    // Prompt 3: Should render a img tag with a role of presentation
-    it('renders an img tag with a role of presentation and the correct name', () => {
-        render(<Character { ...characterProps } />);
+    it("Renders a img for the Character", () => {
+        render(<Character />);
+        const charImg = screen.getByRole('img');
 
-        const characterImg = screen.getByRole('presentation', { name: characterProps.fullName });
-        expect(characterImg).toBeDefined();
+        expect(charImg).toBeDefined();
     });
 
-    // Prompt 4: Should render the correct title
-    it('renders a heading with the correct title', () => {
-        render(<Character { ...characterProps } />);
+    it("Renders a list for the Character", () => {
+        render(<Character />);
+        const charList = screen.getByRole("list");
 
-        const characterHeading = screen.getByRole('heading', { level: 2 });
-        expect(characterHeading.textContent).toBe('King Viserys III Viserys Targaryn of Targaryans');
+        expect(charList).toBeDefined();
+    });
+
+    it("Renders all list items for the Character", () => {
+        render(<Character />);
+        const items = screen.getAllByRole("listitem");
+
+        expect(items.length).toBe(5);
+    });
+
+    it("Renders a list item for the Character's DOB", () => {
+        render(<Character />);
+        const charDob = screen.getByText(/Date of Birth:/i);
+
+        expect(charDob).toBeDefined();
+    });
+
+    it("Renders a list item for the Character's DOD", () => {
+        render(<Character />);
+        const charDeath = screen.getByText(/Date of Death:/i);
+
+        expect(charDeath).toBeDefined();
+    });
+
+    it("Renders a list item for the Character's Race", () => {
+        render(<Character />);
+        const charRace = screen.getByText(/Race:/i);
+
+        expect(charRace).toBeDefined();
+    });
+
+    it("Renders a list item for the Character's Realm", () => {
+        render(<Character />);
+        const charRealm = screen.getByText(/Realm:/i);
+
+        expect(charRealm).toBeDefined();
+    });
+
+    it("Renders a list item for the Character's Spouse", () => {
+        render(<Character />);
+        const charSpouse = screen.getByText(/Spouse:/i);
+
+        expect(charSpouse).toBeDefined();
     });
 });
 
-describe('<Character/> PropTypes Tests', () => {
-    it('does not throw error when expected props are passed', () => {
-        const expectedProps = {
-            "id": 0,
-            "firstName": "Jon",
-            "lastName": "Snow",
-            "fullName": "Jon Snow",
-            "title": "King of the North",
-            "family": "House Stark",
-            "image": "jon-snow.jpg",
-            "imageUrl": "https://thronesapi.com/assets/images/jon-snow.jpg"
-        };
+describe('Character Component Renders Props', () => {
 
-        const propError = checkPropTypes(
-            Character.propTypes,
-            expectedProps,
-            'prop',
-            Character.name
-        );
+    it("Renders the Character's name", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const characterHeading = screen.getByRole('heading', { level: 2, name: samwiseGamgee.name });
 
-        expect(propError).toBeUndefined();
-    })
-
-    //Optional Test Prompt #6
-    it('does not throw error when expected props are passed - Optional Test', () => {
-        const expectedProps = {
-            "id": 0,
-            "firstName": "Jon",
-            "lastName": "Snow",
-            "fullName": "Jon Snow",
-            "title": "King of the North",
-            "family": "House Stark",
-            "image": "jon-snow.jpg",
-            "imageUrl": "https://thronesapi.com/assets/images/jon-snow.jpg"
-        };
-        checkProps(Character, expectedProps);
+        expect(characterHeading).toBeDefined();
     });
-})
+
+    it("Renders the Character's DOB", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const dateOfBirth = screen.getByText(`Date of Birth: ${samwiseGamgee.birth}`);
+
+        expect(dateOfBirth).toBeDefined();
+    });
+
+    it("Renders the Character's DOD", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const charDeath = screen.getByText(`Date of Death: ${samwiseGamgee.death}`);
+
+        expect(charDeath).toBeDefined();
+    });
+
+    it("Renders the Character's Race", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const charRace = screen.getByText(`Race: ${samwiseGamgee.race}`);
+
+        expect(charRace).toBeDefined();
+    });
+
+    it("Renders the Character's Realm", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const charRealm = screen.getByText(`Realm:${samwiseGamgee.realm}`);
+
+        expect(charRealm).toBeDefined();
+    });
+
+    it("Renders the Character's Spouse", () => {
+        render(<Character { ...samwiseGamgee } />);
+        const charSpouse = screen.getByText(`Spouse: ${samwiseGamgee.spouse}`);
+
+        expect(charSpouse).toBeDefined();
+    });
+
+});
